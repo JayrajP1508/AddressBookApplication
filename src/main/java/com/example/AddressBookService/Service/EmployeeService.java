@@ -17,56 +17,66 @@ public class EmployeeService implements IEmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
 
-    @Override
-    public ResponseDTO response(String message, String status) {
+    public ResponseDTO response(String message, String status){
         return new ResponseDTO(message, status);
     }
 
-    @Override
-    public EmployeeDTO get(Long id) {
-        EmployeeEntity foundEmp = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cannot find employee with given id"));
-        return new EmployeeDTO(foundEmp.getId(), foundEmp.getName(), foundEmp.getEmail());
+    public EmployeeDTO get(Long id){
+        EmployeeEntity foundEmp = employeeRepository.findById(id).orElseThrow(()->new RuntimeException("Cannot find employee with given id"));
+
+        EmployeeDTO resDto = new EmployeeDTO(foundEmp.getName(), foundEmp.getEmail(), foundEmp.getId());
+
+        return resDto;
+
     }
 
-    @Override
-    public EmployeeDTO create(EmployeeDTO user) {
+    public EmployeeDTO create(EmployeeDTO user){
         EmployeeEntity newUser = new EmployeeEntity(user.getName(), user.getEmail());
+
         employeeRepository.save(newUser);
-        return new EmployeeDTO(newUser.getId(), newUser.getName(), newUser.getEmail());
+
+        EmployeeDTO resDto = new EmployeeDTO(newUser.getName(), newUser.getEmail(), newUser.getId());
+
+        System.out.println(newUser.getId());
+
+        return resDto;
     }
 
-    @Override
-    public List<EmployeeDTO> getAll() {
-        return employeeRepository.findAll().stream()
-                .map(entity -> new EmployeeDTO(entity.getId(), entity.getName(), entity.getEmail()))
-                .collect(Collectors.toList());
+    public List<EmployeeDTO> getAll(){
+
+        return employeeRepository.findAll().stream().map(entity -> {
+            EmployeeDTO newUser = new EmployeeDTO(entity.getName(), entity.getEmail(), entity.getId());
+            return newUser;
+        }).collect(Collectors.toList());
+
     }
 
-    @Override
-    public EmployeeDTO edit(EmployeeDTO user, Long id) {
-        EmployeeEntity foundEmp = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cannot find employee with given id"));
+    public EmployeeDTO edit(EmployeeDTO user, Long id){
+        EmployeeEntity foundEmp = employeeRepository.findById(id).orElseThrow(()->new RuntimeException("cannot find employee with given id"));
 
         foundEmp.setName(user.getName());
         foundEmp.setEmail(user.getEmail());
+
         employeeRepository.save(foundEmp);
 
-        return new EmployeeDTO(foundEmp.getId(), foundEmp.getName(), foundEmp.getEmail());
+        EmployeeDTO resDto = new EmployeeDTO(foundEmp.getName(), foundEmp.getEmail(), foundEmp.getId());
+
+        return resDto;
     }
 
-    @Override
-    public String delete(Long id) {
-        EmployeeEntity foundUser = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cannot find user with given id"));
+    public String delete(Long id){
+        EmployeeEntity foundUser = employeeRepository.findById(id).orElseThrow(()->new RuntimeException("cannot find user with given id"));
 
         employeeRepository.delete(foundUser);
-        return "Employee deleted";
+
+        return "employee deleted";
     }
 
-    @Override
-    public String clear() {
+    public String clear(){
+
         employeeRepository.deleteAll();
-        return "Database cleared";
+        return "db cleared";
+
     }
+
 }

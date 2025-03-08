@@ -1,8 +1,9 @@
 package com.example.AddressBookService.Controller;
 
-import java.util.*;
 import com.example.AddressBookService.DTO.EmployeeDTO;
 import com.example.AddressBookService.DTO.ResponseDTO;
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
 import com.example.AddressBookService.Interface.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public class AddressController {
     @Autowired
     IEmployeeService iEmployeeService;
 
-    //UC1 --> REST API's handled using response DTO(without interference of service layer)
+    //UC1 --> REST API's handled using responseDTO(without interference of service layer)
 
     @GetMapping("/res/get/{id}")
     public ResponseDTO get1(@PathVariable Long id){
@@ -68,7 +69,37 @@ public class AddressController {
         return iEmployeeService.response("API triggered at /res/delete/{id}", "Success");
     }
 
+//UC3 --> Handling REST API's using service layer with storage in database
 
+    @GetMapping("/get/{id}")
+    public EmployeeDTO get3(@PathVariable Long id){
+        return iEmployeeService.get(id);
+    }
+
+    @PostMapping("/create")
+    public EmployeeDTO create3(@RequestBody EmployeeDTO user){
+        return iEmployeeService.create(user);
+    }
+
+    @GetMapping("/getAll")
+    public List<EmployeeDTO> getAll3(){
+        return iEmployeeService.getAll();
+    }
+
+    @PutMapping("/edit/{id}")
+    public EmployeeDTO edit3(@RequestBody EmployeeDTO user, @PathVariable Long id){
+        return iEmployeeService.edit(user, id);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String delete3(@PathVariable Long id){
+        return iEmployeeService.delete(id);
+    }
+
+    @GetMapping("/clear")
+    public String clear(){
+        return iEmployeeService.clear();
+    }
 
 
 }
