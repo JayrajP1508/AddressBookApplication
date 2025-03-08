@@ -1,25 +1,33 @@
 package com.example.AddressBookService.DTO;
 
-
-
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class ResponseDTO {
+    private String message;
+    private String status;
 
-    String message;
-    String status;
+    // Default constructor
+    public ResponseDTO() {}
 
-
-    public ResponseDTO(String status, String message) {
-        this.status = status;
+    // Constructor with parameters
+    public ResponseDTO(String message, String status) {
         this.message = message;
+        this.status = status;
+    }
+
+    // Getters
+    public String getMessage() {
+        return message;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    // Setters
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
